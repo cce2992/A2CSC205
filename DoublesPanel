@@ -1,0 +1,58 @@
+
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.JCheckBox;
+import javax.swing.JScrollPane;
+import javax.swing.JLabel;
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionListener;
+
+public class DoublesPanel extends PanelerConverter{
+   public Converter.Doubles conv;
+   public DoublesPanel(){
+      conv = new Converter.Doubles();
+      double val = 0.0;
+      ActionListener AL =
+         new ActionListener(){
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+               if(updating.length()==0)
+                  updating = conv.fromBinary(makeBin());}};
+      bin = new JCheckBox[66];
+      JPanel binPanel = new JPanel();
+      binPanel.setLayout(new GridLayout(1, bin.length));
+      int j = 0;
+      for(int k = 0; k < bin.length; k++){
+         bin[k] = new JCheckBox(""+j, false);
+         bin[k].addActionListener(AL);
+         if(k==13||k==1){
+            bin[k].setText("");
+            bin[k].setEnabled(false);}
+         else
+            j++;
+         binPanel.add(bin[k]);}
+      mainPanel.add(new JScrollPane(binPanel), BorderLayout.CENTER);
+      dec = new JTextField(""+val, 20);
+      dec.addCaretListener(
+            new javax.swing.event.CaretListener(){
+               public void caretUpdate(javax.swing.event.CaretEvent ce){
+                  if(updating.length()==0)
+                     updating=(conv.turnHexadecimal(Double.parseDouble(dec.getText())));}});
+      mainPanel.add(dec, BorderLayout.WEST);
+      hex = new JTextField(conv.turnHexadecimal(val), 16);
+      hex.addCaretListener(
+            new javax.swing.event.CaretListener(){
+               public void caretUpdate(javax.swing.event.CaretEvent ce){
+                  if(updating.length()==0)
+                     updating=(hex.getText());}});
+      mainPanel.add(hex, BorderLayout.EAST);
+      clock.start();}
+   public void update(String hexCode){
+      System.out.println("UpdateD: 0x"+hexCode);
+      int locH = hex.getCaretPosition();
+      int locD = dec.getCaretPosition();
+      hex.setText(hexCode);
+      hex.setCaretPosition(locH);
+      dec.setText(""+conv.fromHexadecimal(hexCode));
+      dec.setCaretPosition(locD);
+      setBin(conv.toBinary(hexCode));}}
