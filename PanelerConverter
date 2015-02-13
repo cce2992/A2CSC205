@@ -1,0 +1,59 @@
+
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.JCheckBox;
+import javax.swing.JScrollPane;
+import javax.swing.JLabel;
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionListener;
+
+public abstract class PanelerConverter{
+ protected JPanel mainPanel;
+	   protected JTextField dec;
+	   protected JTextField hex;
+	   protected JCheckBox[] bin;
+	   protected String updating = "";
+	   protected Clock clock;
+public PanelerConverter(){
+	      mainPanel = new JPanel();
+	      mainPanel.setLayout(new BorderLayout(0, 0));
+	      clock = new Clock();}
+	   public static PanelerConverter build(boolean doubles){
+	      if(doubles)
+	         return new DoublesPanel();
+	      else
+	         return new SinglesPanel();}
+
+
+
+	   protected void setBin(boolean[] bits){
+	      int j = 0;
+	      for(int k = 0; k < bin.length; k++)
+	         if(bin[k].isEnabled())
+	            bin[k].setSelected(bits[j++]);}
+	   protected boolean[] makeBin(){
+	      int j = 0;
+	      boolean[] result = new boolean[bin.length-2];
+	      for(int k = 0; k < bin.length; k++)
+	         if(bin[k].isEnabled())
+	            result[j++]=bin[k].isSelected();
+	      return result;}
+
+	   public JPanel getPanel(){
+	      return mainPanel;}
+
+	   protected class Clock extends Thread{
+	      public void run(){
+	         String last = "";
+	         while(true){
+	            try{Thread.sleep(10);}
+	            catch(Exception e){}
+	            if(updating.length()!=0){
+	               String hex = updating;
+	               updating = "";
+	               if(!hex.equals(last)){
+	                  last = hex;
+	                  update(hex);}}}}}
+
+	   abstract void update(String hexCode);}
