@@ -1,0 +1,181 @@
+
+
+public class Converter{
+   public static String fromBinary(boolean[] bits){
+	   String hexa ="";
+      if((bits.length%4)!=0)
+
+       hexa = "";
+      for(int k = 0; k < bits.length; k+=4)
+         hexa+=pull(bits[k], bits[k+1], bits[k+2], bits[k+3]);
+      return hexa;}
+
+
+   public static class Doubles extends Converter{
+      public static boolean[] toBinary(String hexa){
+         return fill(new boolean[64], hexa);}
+      public static double fromHexadecimal(String hexa){
+         boolean[] first = fill(new boolean[4], ""+hexa.charAt(0));
+         hexa = pull(false, first[1], first[2], first[3])+hexa.substring(1);
+         double result = Double.longBitsToDouble(Long.parseLong(hexa, 16));
+         if(first[0])
+            if(result>=0.0)
+               result *= -1.0;
+         return result;}
+      public static String turnHexadecimal(double d){
+         String result = Long.toHexString(Double.doubleToRawLongBits(d)).toUpperCase();
+         while(result.length() < 16)
+            result = "0"+result;
+         return result;}}
+
+
+   public static class Singles extends Converter{
+      public static boolean[] toBinary(String hexa){
+         return fill(new boolean[32], hexa);}
+      public static float fromHexadecimal(String hexa){
+         boolean[] first = fill(new boolean[4], ""+hexa.charAt(0));
+         hexa = pull(false, first[1], first[2], first[3])+hexa.substring(1);
+         float result = Float.intBitsToFloat(Integer.parseInt(hexa, 16));
+         if(first[0])
+            if(result>=0.0F)
+               result *= -1.0F;
+         return result;}
+      public static String turnHexadecimal(float f){
+         String result = Integer.toHexString(Float.floatToRawIntBits(f)).toUpperCase();
+         while(result.length() < 8)
+            result = "0"+result;
+         return result;}}
+
+
+
+
+
+
+   /*Post-cindition:
+   fill will take a booleafirstrray and fill it with a hexa string
+   */
+   private static boolean[] fill(boolean[] result, String hexa){
+	         int k = 0;
+
+      if(result.length!=(hexa.length()*4))
+k = 0;
+      while(hexa.length()>0)
+         switch(hexa.charAt(0)){
+            default:
+               result[k++] = false;result[k++] = false;result[k++] = false;result[k++] = false;
+               hexa = hexa.substring(1);
+               break;
+            case '1':
+               result[k++] = false;result[k++] = false;result[k++] = false;result[k++] = true;
+               hexa = hexa.substring(1);
+               break;
+            case '2':
+               result[k++] = false;result[k++] = false;result[k++] = true;result[k++] = false;
+               hexa = hexa.substring(1);
+               break;
+            case '3':
+               result[k++] = false;result[k++] = false;result[k++] = true;result[k++] = true;
+               hexa = hexa.substring(1);
+               break;
+            case '4':
+               result[k++] = false;result[k++] = true;result[k++] = false;result[k++] = false;
+               hexa = hexa.substring(1);
+               break;
+            case '5':
+               result[k++] = false;result[k++] = true;result[k++] = false;result[k++] = true;
+               hexa = hexa.substring(1);
+               break;
+            case '6':
+               result[k++] = false;result[k++] = true;result[k++] = true;result[k++] = false;
+               hexa = hexa.substring(1);
+               break;
+            case '7':
+               result[k++] = false;result[k++] = true;result[k++] = true;result[k++] = true;
+               hexa = hexa.substring(1);
+               break;
+            case '8':
+               result[k++] = true;result[k++] = false;result[k++] = false;result[k++] = false;
+               hexa = hexa.substring(1);
+               break;
+            case '9':
+               result[k++] = true;result[k++] = false;result[k++] = false;result[k++] = true;
+               hexa = hexa.substring(1);
+               break;
+            case 'A':
+               result[k++] = true;result[k++] = false;result[k++] = true;result[k++] = false;
+               hexa = hexa.substring(1);
+               break;
+            case 'B':
+               result[k++] = true;result[k++] = false;result[k++] = true;result[k++] = true;
+               hexa = hexa.substring(1);
+               break;
+            case 'C':
+               result[k++] = true;result[k++] = true;result[k++] = false;result[k++] = false;
+               hexa = hexa.substring(1);
+               break;
+            case 'D':
+               result[k++] = true;result[k++] = true;result[k++] = false;result[k++] = true;
+               hexa = hexa.substring(1);
+               break;
+            case 'E':
+               result[k++] = true;result[k++] = true;result[k++] = true;result[k++] = false;
+               hexa = hexa.substring(1);
+               break;
+            case 'F':
+               result[k++] = true;result[k++] = true;result[k++] = true;result[k++] = true;
+               hexa = hexa.substring(1);
+               break;}
+      return result;}
+
+        /*Post-condition:return  a single hexadecimal char expression
+        using four booleans
+*/
+   private static char pull(boolean first, boolean second, boolean third, boolean fourth){
+      if(first)
+         if(second)
+            if(third)
+               if(fourth)
+                  return 'F';
+               else
+                  return 'E';
+            else
+               if(fourth)
+                  return 'D';
+               else
+                  return 'C';
+         else
+            if(third)
+               if(fourth)
+                  return 'B';
+               else
+                  return 'A';
+            else
+               if(fourth)
+                  return '9';
+               else
+                  return '8';
+      else
+         if(second)
+            if(third)
+               if(fourth)
+                  return '7';
+               else
+                  return '6';
+            else
+               if(fourth)
+                  return '5';
+               else
+                  return '4';
+         else
+            if(third)
+               if(fourth)
+                  return '3';
+               else
+                  return '2';
+            else
+               if(fourth)
+                  return '1';
+               else
+                  return '0';
+   }
+}
