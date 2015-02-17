@@ -12,7 +12,7 @@ public Assignment2_IEEE754(){
 public JTabbedPane makeMainPanel(){
 	JTabbedPane framePanel = new JTabbedPane();
 	framePanel.addTab("32 Bit Single", (PanelerConverter.build(false)).getPanel());
-	framePanel.addTab("64 Bit Doubles",(PanelerConverter.build(false)).getPanel());
+	framePanel.addTab("64 Bit Doubles",(PanelerConverter.build(true)).getPanel());
 
 	return framePanel;
 }
