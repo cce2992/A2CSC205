@@ -1,0 +1,10 @@
+public class guiTest {
+	public static void main (String[] args){
+	Assignment2_IEEE754 gui =new Assignment2_IEEE754();
+	gui.startJApplet();
+
+	}
+	
+	
+
+}
